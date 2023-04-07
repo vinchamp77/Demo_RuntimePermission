@@ -66,4 +66,6 @@ dependencies {
     implementation("androidx.core:core-splashscreen:1.0.0")
 
     implementation("com.github.vinchamp77:buildutils:0.0.6")
+
+    implementation ("com.google.accompanist:accompanist-permissions:0.31.0-alpha")
 }
