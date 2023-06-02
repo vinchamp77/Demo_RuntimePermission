@@ -1,6 +1,5 @@
 package vtsen.hashnode.dev.runtimepermissiondemoapp.ui
 
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -23,17 +22,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             RuntimePermissionDemoAppTheme {
-                MainScreen(::shouldShowRequestPermissionRationale)
+                MainScreen()
             }
-        }
-    }
-
-    override fun shouldShowRequestPermissionRationale(permission: String) : Boolean
-    {
-        return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            super.shouldShowRequestPermissionRationale(permission)
-        } else {
-            false
         }
     }
 

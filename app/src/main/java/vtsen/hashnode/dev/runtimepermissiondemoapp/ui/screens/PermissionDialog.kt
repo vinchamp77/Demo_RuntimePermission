@@ -1,108 +1,107 @@
 package vtsen.hashnode.dev.runtimepermissiondemoapp.ui.screens
 
-import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.core.content.ContextCompat.startActivity
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun PermissionDialog(
-    permissionStr: String,
-    shouldShowRequestPermissionRationale: (String) -> Boolean
-)
-{
-
-    var isPermissionGranted by remember { mutableStateOf(true)}
-    var shouldLaunchPermission by remember { mutableStateOf(true)}
-    var showAlertDialog by remember { mutableStateOf(false)}
-
-
-    val permissionResultLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-        onResult = { isGranted ->
-            Log.d("vtsen", "launch() callback - isGranted: $isGranted")
-            shouldLaunchPermission = false
-            if(!isGranted) {
-                showAlertDialog = true
-            }
-        }
-    )
-
-    if(shouldLaunchPermission) {
-        SideEffect {
-            Log.d("vtsen", "permissionResultLauncher.launch()")
-            permissionResultLauncher.launch(
-                permissionStr
-            )
-        }
-    }
-
-    if(showAlertDialog) {
-        AlertDialog(
-                onDismissRequest = { },
-                title = { Text(text = "Alert Dialog Title") },
-                text = { Text(text = "Alert Dialog Message") },
-                confirmButton = {
-                    Button(onClick = {
-                        showAlertDialog = false
-                        shouldLaunchPermission = true
-                    }) {
-                        Text(text = "OK")
-                    }
-                },
-                //dismissButton = { Button(onClick = { }) { Text(text = "Cancel") } }
-            )
-    }
-
-//    if(!isPermissionGranted) {
-//
-//        if(shouldShowRequestPermissionRationale(permissionStr)) {
-//            Log.d("vtsen", "shouldShowRequestPermissionRationale: true")
-//        } else {
-//            Log.d("vtsen", "shouldShowRequestPermissionRationale: false")
-//            //Log.d("vtsen", "shouldLaunchPermission = true")
-//            AlertDialog(
-//                onDismissRequest = { },
-//                title = { Text(text = "Alert Dialog Title") },
-//                text = { Text(text = "Alert Dialog Message") },
-//                confirmButton = { Button(onClick = { }) { Text(text = "OK") } },
-//                dismissButton = { Button(onClick = { }) { Text(text = "Cancel") } }
-//            )
-//        }
-//    }
-
-}
-
-//Note: this doesn't work very well
-@OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
-@Composable
-fun PermissionDialogFromAccompanish(
-    permissionStr: String,
-    )
-{
-    val permissionState = rememberPermissionState(permissionStr)
+    permission: String,
+    requiredPermission: Boolean,
+    onPermissionStatus: (PermissionStatus) -> Unit
+) {
+    val permissionState = rememberPermissionState(permission)
 
     if (permissionState.status.isGranted) {
-        // do nothing
+        onPermissionStatus(permissionState.status)
     }
     else if (permissionState.status.shouldShowRationale)
     {
-        AlertDialog(onDismissRequest = { /*TODO*/ }) {
-
+        if (requiredPermission) {
+            RequiredPermissionDialog(permission)
+        } else {
+            OptionalPermissionDialog(
+                permission,
+                dismissCallback = {
+                    onPermissionStatus(permissionState.status)
+                }
+            )
         }
     }
     else {
-        SideEffect {
+       SideEffect {
             permissionState.launchPermissionRequest()
         }
     }
  }
+
+@Composable
+fun RequiredPermissionDialog (permission: String) {
+    val context = LocalContext.current
+    val permissionLabel = stringResource(
+        context.packageManager.getPermissionInfo(permission, 0).labelRes
+    )
+
+    AlertDialog(
+        onDismissRequest = { },
+        title = { Text(text = "Permission Required!") },
+        text = { Text(text = permissionLabel) },
+        confirmButton = {
+            Button(onClick = {
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    .apply {
+                        data = Uri.fromParts("package", context.packageName, null)
+                    }
+                startActivity(context, intent, null)
+            }) {
+                Text(text = "Go to settings")
+            }
+        },
+    )
+}
+
+@Composable
+fun OptionalPermissionDialog (permission: String, dismissCallback: () -> Unit) {
+    val context = LocalContext.current
+    val permissionLabel = stringResource(
+        context.packageManager.getPermissionInfo(permission, 0).labelRes
+    )
+
+    AlertDialog(
+        onDismissRequest = { },
+        title = { Text(text = "Permission Required!") },
+        text = { Text(text = permissionLabel) },
+        confirmButton = {
+            Button(onClick = {
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    .apply {
+                        data = Uri.fromParts("package", context.packageName, null)
+                    }
+                startActivity(context, intent, null)
+            }) {
+                Text(text = "Go to settings")
+            }
+        },
+        dismissButton = {
+            Button(onClick = {
+                dismissCallback()
+            }) {
+                Text(text = "Cancel")
+            }
+        }
+    )
+}
