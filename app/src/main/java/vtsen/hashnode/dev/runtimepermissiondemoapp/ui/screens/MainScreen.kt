@@ -19,7 +19,7 @@ import com.google.accompanist.permissions.isGranted
 @Composable
 fun MainScreen() {
 
-    var permissionStatusText by remember { mutableStateOf("") }
+    var permissionStatusText by remember { mutableStateOf("N/A") }
     var showRequiredPermissionDialog by remember { mutableStateOf(false) }
     var showOptionalPermissionDialog by remember { mutableStateOf(false) }
 
