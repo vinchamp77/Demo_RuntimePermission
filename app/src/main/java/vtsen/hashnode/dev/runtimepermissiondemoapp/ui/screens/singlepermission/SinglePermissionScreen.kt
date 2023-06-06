@@ -1,4 +1,4 @@
-package vtsen.hashnode.dev.runtimepermissiondemoapp.ui.screens
+package vtsen.hashnode.dev.runtimepermissiondemoapp.ui.screens.singlepermission
 
 import android.Manifest
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +17,7 @@ import com.google.accompanist.permissions.isGranted
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun MultiplePermissionsScreen() {
+fun SinglePermissionScreen() {
 
     var permissionStatusText by remember { mutableStateOf("N/A") }
     var showRequiredPermissionDialog by remember { mutableStateOf(false) }
@@ -64,7 +64,9 @@ fun MultiplePermissionsScreen() {
             } else {
                 "Denied"
             }
+
             showOptionalPermissionDialog = false
+
         }
     }
 

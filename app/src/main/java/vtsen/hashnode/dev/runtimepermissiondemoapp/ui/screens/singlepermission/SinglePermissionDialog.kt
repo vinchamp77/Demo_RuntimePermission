@@ -1,4 +1,4 @@
-package vtsen.hashnode.dev.runtimepermissiondemoapp.ui.screens
+package vtsen.hashnode.dev.runtimepermissiondemoapp.ui.screens.singlepermission
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -35,6 +35,8 @@ fun SinglePermissionDialog(
     }
     else {
        SideEffect {
+           //Note: Accompanist limitation - user click back button doesn't update
+           //the permission state
             permissionState.launchPermissionRequest()
         }
     }

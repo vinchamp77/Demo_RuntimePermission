@@ -1,4 +1,4 @@
-package vtsen.hashnode.dev.runtimepermissiondemoapp.ui.screens
+package vtsen.hashnode.dev.runtimepermissiondemoapp.ui.screens.singlepermission
 
 import android.content.Intent
 import android.net.Uri
@@ -19,7 +19,7 @@ fun OptionalPermissionDialog (permission: String, dismissCallback: () -> Unit) {
     )
 
     AlertDialog(
-        onDismissRequest = { },
+        onDismissRequest = { dismissCallback()},
         title = { Text(text = "Permission Required!") },
         text = { Text(text = permissionLabel) },
         confirmButton = {

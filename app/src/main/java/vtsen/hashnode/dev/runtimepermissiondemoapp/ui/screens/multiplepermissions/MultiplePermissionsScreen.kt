@@ -1,4 +1,4 @@
-package vtsen.hashnode.dev.runtimepermissiondemoapp.ui.screens
+package vtsen.hashnode.dev.runtimepermissiondemoapp.ui.screens.multiplepermissions
 
 import android.Manifest
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +17,7 @@ import com.google.accompanist.permissions.isGranted
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun SinglePermissionScreen() {
+fun MultiplePermissionsScreen() {
 
     var permissionStatusText by remember { mutableStateOf("N/A") }
     var showRequiredPermissionDialog by remember { mutableStateOf(false) }
@@ -46,24 +46,45 @@ fun SinglePermissionScreen() {
 
     if(showRequiredPermissionDialog)
     {
-        SinglePermissionDialog(Manifest.permission.CALL_PHONE, true) { permissionStatus ->
-            permissionStatusText = if (permissionStatus.isGranted) {
-                "Granted"
-            } else {
-                "Denied"
+        val permissions = mutableListOf(
+            Manifest.permission.CALL_PHONE,
+            Manifest.permission.CAMERA,
+            Manifest.permission.RECORD_AUDIO
+        ).toList()
+        MultiplePermissionsDialog(permissions, true) { permissionsStatus ->
+
+            permissionStatusText = "\n"
+            for(permissionStatus in permissionsStatus) {
+                val statusText = if (permissionStatus.status.isGranted) {
+                    "Granted\n"
+                } else {
+                    "Denied\n"
+                }
+                permissionStatusText += "${permissionStatus.permission}: $statusText"
             }
-            showRequiredPermissionDialog = false
+
+            showOptionalPermissionDialog = false
         }
     }
-
     if(showOptionalPermissionDialog)
     {
-        SinglePermissionDialog(Manifest.permission.CALL_PHONE, false) { permissionStatus ->
-            permissionStatusText = if (permissionStatus.isGranted) {
-                "Granted"
-            } else {
-                "Denied"
+        val permissions = mutableListOf(
+            Manifest.permission.CALL_PHONE,
+            Manifest.permission.CAMERA,
+            Manifest.permission.RECORD_AUDIO
+        ).toList()
+        MultiplePermissionsDialog(permissions, false) { permissionsStatus ->
+
+            permissionStatusText = "\n"
+            for(permissionStatus in permissionsStatus) {
+                val statusText = if (permissionStatus.status.isGranted) {
+                    "Granted\n"
+                } else {
+                    "Denied\n"
+                }
+                permissionStatusText += "${permissionStatus.permission}: $statusText"
             }
+
             showOptionalPermissionDialog = false
         }
     }

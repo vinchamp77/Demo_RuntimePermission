@@ -1,4 +1,4 @@
-package vtsen.hashnode.dev.runtimepermissiondemoapp.ui.screens
+package vtsen.hashnode.dev.runtimepermissiondemoapp.ui.screens.multiplepermissions
 
 import android.content.Intent
 import android.net.Uri
@@ -12,16 +12,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 
 @Composable
-fun RequiredPermissionDialog (permission: String) {
+fun RequiredPermissionsDialog (permissions: List<String>) {
     val context = LocalContext.current
-    val permissionLabel = stringResource(
-        context.packageManager.getPermissionInfo(permission, 0).labelRes
-    )
-
+    var permissionLabels = ""
+    for(permission in permissions) {
+        val permissionLabel = stringResource(
+            context.packageManager.getPermissionInfo(permission, 0).labelRes
+        )
+        permissionLabels += "$permissionLabel \n"
+    }
     AlertDialog(
         onDismissRequest = { },
         title = { Text(text = "Permission Required!") },
-        text = { Text(text = permissionLabel) },
+        text = { Text(text = permissionLabels) },
         confirmButton = {
             Button(onClick = {
                 val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
