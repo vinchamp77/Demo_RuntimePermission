@@ -1,6 +1,6 @@
 package vtsen.hashnode.dev.runtimepermissiondemoapp.ui.screens
 
-import android.Manifest
+import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,20 +8,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
+import vtsen.hashnode.dev.runtimepermissiondemoapp.ui.MultiplePermissionsActivity
+import vtsen.hashnode.dev.runtimepermissiondemoapp.ui.SinglePermissionActivity
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun MainScreen() {
 
-    var permissionStatusText by remember { mutableStateOf("N/A") }
-    var showRequiredPermissionDialog by remember { mutableStateOf(false) }
-    var showOptionalPermissionDialog by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -29,44 +27,21 @@ fun MainScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Text("Permission status: $permissionStatusText")
         Spacer(modifier = Modifier.padding(5.dp))
         Button(onClick = {
-            showRequiredPermissionDialog = true
+            context.startActivity(
+                Intent(context, SinglePermissionActivity::class.java)
+            )
         }) {
-            Text(text = "Request Required Permission")
+            Text(text = "Single Permission")
         }
         Spacer(modifier = Modifier.padding(5.dp))
         Button(onClick = {
-            showOptionalPermissionDialog = true
+            context.startActivity(
+                Intent(context, MultiplePermissionsActivity::class.java)
+            )
         }) {
-            Text(text = "Request Optional Permission")
+            Text(text = "Multiple Permission")
         }
     }
-
-    if(showRequiredPermissionDialog)
-    {
-        PermissionDialog(Manifest.permission.CALL_PHONE, true) { permissionStatus ->
-            permissionStatusText = if (permissionStatus.isGranted) {
-                "Granted"
-            } else {
-                "Denied"
-            }
-            showRequiredPermissionDialog = false
-        }
-    }
-
-    if(showOptionalPermissionDialog)
-    {
-        PermissionDialog(Manifest.permission.CALL_PHONE, false) { permissionStatus ->
-            permissionStatusText = if (permissionStatus.isGranted) {
-                "Granted"
-            } else {
-                "Denied"
-            }
-            showOptionalPermissionDialog = false
-        }
-    }
-
 }
-
