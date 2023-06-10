@@ -21,20 +21,23 @@ fun OptionalSinglePermissionScreen(
     val permissionState = rememberPermissionState(permission)
 
     var launchPermissionDialog by remember { mutableStateOf(true) }
+    var showRational by remember { mutableStateOf(true) }
 
     if (permissionState.status.isGranted) {
         permissionStatusText = "Granted"
     }
-    else if (permissionState.status.shouldShowRationale)
-    {
+
+    else if (permissionState.status.shouldShowRationale) {
         permissionStatusText = "Denied"
 
-        OptionalRationalPermissionDialog(
-            permission,
-            dismissCallback = {}
-        )
-    }
-    else {
+        if(showRational) {
+            OptionalRationalPermissionDialog(
+                permission,
+                dismissCallback = {showRational = false}
+            )
+        }
+
+    } else {
         permissionStatusText = "N/A"
         if (launchPermissionDialog) {
             OptionalLaunchPermissionDialog(
@@ -53,12 +56,10 @@ fun OptionalSinglePermissionScreen(
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-
         Text("Optional Permission status: $permissionStatusText")
     }
-
 }
 
 

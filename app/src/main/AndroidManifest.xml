@@ -31,7 +31,8 @@
 
         <activity android:name=".ui.OptionalSinglePermissionActivity" />
         <activity android:name=".ui.RequiredSinglePermissionActivity" />
-        <activity android:name=".ui.MultiplePermissionsActivity" />
+        <activity android:name=".ui.OptionalMultiplePermissionsActivity" />
+        <activity android:name=".ui.RequiredMultiplePermissionsActivity" />
     </application>
 
 </manifest>

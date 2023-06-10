@@ -12,7 +12,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 
 @Composable
-fun RequiredPermissionsDialog (permissions: List<String>) {
+fun OptionalRationalPermissionsDialog (
+    permissions: List<String>,
+    dismissCallback: () -> Unit
+) {
     val context = LocalContext.current
     var permissionLabels = ""
     for(permission in permissions) {
@@ -21,6 +24,8 @@ fun RequiredPermissionsDialog (permissions: List<String>) {
         )
         permissionLabels += "$permissionLabel \n"
     }
+
+
     AlertDialog(
         onDismissRequest = { },
         title = { Text(text = "Permission Required!") },
@@ -36,5 +41,12 @@ fun RequiredPermissionsDialog (permissions: List<String>) {
                 Text(text = "Go to settings")
             }
         },
+        dismissButton = {
+            Button(onClick = {
+                dismissCallback()
+            }) {
+                Text(text = "Cancel")
+            }
+        }
     )
 }

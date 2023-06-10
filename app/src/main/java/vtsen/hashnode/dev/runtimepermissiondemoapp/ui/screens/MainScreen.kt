@@ -13,8 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import vtsen.hashnode.dev.runtimepermissiondemoapp.ui.MultiplePermissionsActivity
+import vtsen.hashnode.dev.runtimepermissiondemoapp.ui.OptionalMultiplePermissionsActivity
 import vtsen.hashnode.dev.runtimepermissiondemoapp.ui.OptionalSinglePermissionActivity
+import vtsen.hashnode.dev.runtimepermissiondemoapp.ui.RequiredMultiplePermissionsActivity
 import vtsen.hashnode.dev.runtimepermissiondemoapp.ui.RequiredSinglePermissionActivity
 
 @Composable
@@ -49,10 +50,19 @@ fun MainScreen() {
         Spacer(modifier = Modifier.padding(5.dp))
         Button(onClick = {
             context.startActivity(
-                Intent(context, MultiplePermissionsActivity::class.java)
+                Intent(context, OptionalMultiplePermissionsActivity::class.java)
             )
         }) {
-            Text(text = "Multiple Permission")
+            Text(text = "Optional Multiple Permission")
+        }
+
+        Spacer(modifier = Modifier.padding(5.dp))
+        Button(onClick = {
+            context.startActivity(
+                Intent(context, RequiredMultiplePermissionsActivity::class.java)
+            )
+        }) {
+            Text(text = "Required Multiple Permission")
         }
     }
 }
