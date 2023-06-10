@@ -14,7 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import vtsen.hashnode.dev.runtimepermissiondemoapp.ui.MultiplePermissionsActivity
-import vtsen.hashnode.dev.runtimepermissiondemoapp.ui.SinglePermissionActivity
+import vtsen.hashnode.dev.runtimepermissiondemoapp.ui.OptionalSinglePermissionActivity
+import vtsen.hashnode.dev.runtimepermissiondemoapp.ui.RequiredSinglePermissionActivity
 
 @Composable
 fun MainScreen() {
@@ -30,11 +31,21 @@ fun MainScreen() {
         Spacer(modifier = Modifier.padding(5.dp))
         Button(onClick = {
             context.startActivity(
-                Intent(context, SinglePermissionActivity::class.java)
+                Intent(context, OptionalSinglePermissionActivity::class.java)
             )
         }) {
-            Text(text = "Single Permission")
+            Text(text = "Optional Single Permission")
         }
+
+        Spacer(modifier = Modifier.padding(5.dp))
+        Button(onClick = {
+            context.startActivity(
+                Intent(context, RequiredSinglePermissionActivity::class.java)
+            )
+        }) {
+            Text(text = "Required Single Permission")
+        }
+
         Spacer(modifier = Modifier.padding(5.dp))
         Button(onClick = {
             context.startActivity(

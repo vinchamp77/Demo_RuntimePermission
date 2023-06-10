@@ -29,7 +29,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.SinglePermissionActivity" />
+        <activity android:name=".ui.OptionalSinglePermissionActivity" />
+        <activity android:name=".ui.RequiredSinglePermissionActivity" />
         <activity android:name=".ui.MultiplePermissionsActivity" />
     </application>
 
