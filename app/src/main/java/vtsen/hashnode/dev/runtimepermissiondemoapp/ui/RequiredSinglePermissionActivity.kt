@@ -4,7 +4,7 @@ import android.Manifest
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import vtsen.hashnode.dev.runtimepermissiondemoapp.ui.screens.singlepermission.OptionalSinglePermissionScreen
+import vtsen.hashnode.dev.runtimepermissiondemoapp.ui.screens.singlepermission.RequiredSinglePermissionScreen
 import vtsen.hashnode.dev.runtimepermissiondemoapp.ui.theme.RuntimePermissionDemoAppTheme
 
 class RequiredSinglePermissionActivity : ComponentActivity() {
@@ -16,7 +16,7 @@ class RequiredSinglePermissionActivity : ComponentActivity() {
         setContent {
             RuntimePermissionDemoAppTheme {
 
-                OptionalSinglePermissionScreen(Manifest.permission.CALL_PHONE)
+                RequiredSinglePermissionScreen(Manifest.permission.CALL_PHONE)
             }
         }
     }

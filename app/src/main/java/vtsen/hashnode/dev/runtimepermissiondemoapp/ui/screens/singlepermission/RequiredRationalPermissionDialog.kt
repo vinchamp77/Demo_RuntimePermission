@@ -12,7 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 
 @Composable
-fun RequiredPermissionDialog (permission: String) {
+fun RequiredRationalPermissionDialog (permission: String) {
     val context = LocalContext.current
     val permissionLabel = stringResource(
         context.packageManager.getPermissionInfo(permission, 0).labelRes
