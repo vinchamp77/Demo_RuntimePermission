@@ -18,8 +18,8 @@ class OptionalMultiplePermissionsActivity : ComponentActivity() {
 
                 val permissions = mutableListOf(
                     Manifest.permission.CALL_PHONE,
-                    //Manifest.permission.CAMERA,
-                    //Manifest.permission.RECORD_AUDIO
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.RECORD_AUDIO
                 ).toList()
 
                 OptionalMultiplePermissionScreen(permissions)
