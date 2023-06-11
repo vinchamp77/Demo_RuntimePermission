@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 
@@ -17,7 +18,6 @@ fun OptionalMultiplePermissionScreen(
     permissions: List<String>
 ) {
 
-    var permissionStatusText by remember { mutableStateOf("") }
     var showRational by remember { mutableStateOf(true) }
     val multiplePermissionsState = rememberMultiplePermissionsState(permissions)
 
@@ -35,25 +35,28 @@ fun OptionalMultiplePermissionScreen(
         }
     }
 
-
-
-Column(
+    Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        permissionStatusText = "\n"
-        for(permissionStatus in multiplePermissionsState.permissions) {
-            val statusText = if (permissionStatus.status.isGranted) {
-                "Granted\n"
-            } else {
-                "Denied\n"
-            }
-            permissionStatusText += "${permissionStatus.permission}: $statusText"
-        }
-
-        Text("Optional Permission status: $permissionStatusText")
+        Text("Optional Permission status: ${getPermissionStatusText(multiplePermissionsState)}")
     }
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+fun getPermissionStatusText(multiplePermissionsState: MultiplePermissionsState): String {
+    var permissionStatusText = "\n"
+    for(permissionStatus in multiplePermissionsState.permissions) {
+        val statusText = if (permissionStatus.status.isGranted) {
+            "Granted\n"
+        } else {
+            "Denied\n"
+        }
+        permissionStatusText += "${permissionStatus.permission}: $statusText"
+    }
+
+    return permissionStatusText
 }
 
