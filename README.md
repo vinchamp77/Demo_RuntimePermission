@@ -1,1 +1,1 @@
-# Request Runtime Permission Demo App in Jetpack Compose
+# Request Runtime Permissions in Jetpack Compose
