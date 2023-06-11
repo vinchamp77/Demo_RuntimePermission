@@ -13,6 +13,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 
 @OptIn(ExperimentalPermissionsApi::class)
+
 @Composable
 fun OptionalSinglePermissionScreen(
     permission: String,
@@ -21,7 +22,7 @@ fun OptionalSinglePermissionScreen(
     val permissionState = rememberPermissionState(permission)
 
     var launchPermissionDialog by remember { mutableStateOf(true) }
-    var showRational by remember { mutableStateOf(true) }
+    var showRationale by remember { mutableStateOf(true) }
 
     if (permissionState.status.isGranted) {
         permissionStatusText = "Granted"
@@ -30,10 +31,10 @@ fun OptionalSinglePermissionScreen(
     else if (permissionState.status.shouldShowRationale) {
         permissionStatusText = "Denied"
 
-        if(showRational) {
+        if(showRationale) {
             OptionalRationalPermissionDialog(
                 permission,
-                dismissCallback = {showRational = false}
+                dismissCallback = {showRationale = false}
             )
         }
 

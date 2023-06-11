@@ -17,7 +17,7 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 fun OptionalMultiplePermissionScreen(
     permissions: List<String>
 ) {
-    var showRational by remember { mutableStateOf(true) }
+    var showRationale by remember { mutableStateOf(true) }
     val multiplePermissionsState = rememberMultiplePermissionsState(permissions)
     var launchPermissionDialog by remember { mutableStateOf(true) }
     val permissionStatusText by remember(multiplePermissionsState) {
@@ -27,10 +27,10 @@ fun OptionalMultiplePermissionScreen(
     }
 
     if (multiplePermissionsState.shouldShowRationale) {
-        if(showRational) {
+        if(showRationale) {
             OptionalRationalPermissionsDialog(
                 permissions,
-                dismissCallback = {showRational = false}
+                dismissCallback = {showRationale = false}
             )
         }
 
