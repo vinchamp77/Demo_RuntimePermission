@@ -17,9 +17,14 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 fun OptionalMultiplePermissionScreen(
     permissions: List<String>
 ) {
-
     var showRational by remember { mutableStateOf(true) }
     val multiplePermissionsState = rememberMultiplePermissionsState(permissions)
+    var launchPermissionDialog by remember { mutableStateOf(true) }
+    val permissionStatusText by remember(multiplePermissionsState) {
+        derivedStateOf {
+            getPermissionStatusText(multiplePermissionsState)
+        }
+    }
 
     if (multiplePermissionsState.shouldShowRationale) {
         if(showRational) {
@@ -30,9 +35,18 @@ fun OptionalMultiplePermissionScreen(
         }
 
     } else if (!multiplePermissionsState.allPermissionsGranted)  {
-        SideEffect {
-            multiplePermissionsState.launchMultiplePermissionRequest()
+        if (launchPermissionDialog) {
+            OptionalLaunchPermissionsDialog(
+                permissions,
+                multiplePermissionsState,
+                dismissCallback = { launchPermissionDialog = false}
+            )
+
+            SideEffect {
+                multiplePermissionsState.launchMultiplePermissionRequest()
+            }
         }
+
     }
 
     Column(
@@ -40,8 +54,7 @@ fun OptionalMultiplePermissionScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-        Text("Optional Permission status: ${getPermissionStatusText(multiplePermissionsState)}")
+        Text("Optional Permission status: $permissionStatusText")
     }
 }
 

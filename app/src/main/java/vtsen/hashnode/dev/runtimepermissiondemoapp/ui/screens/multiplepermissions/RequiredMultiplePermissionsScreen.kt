@@ -8,7 +8,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -17,8 +16,12 @@ fun RequiredMultiplePermissionScreen(
     permissions: List<String>
 ) {
 
-    var permissionStatusText by remember { mutableStateOf("") }
     val multiplePermissionsState = rememberMultiplePermissionsState(permissions)
+    val permissionStatusText by remember(multiplePermissionsState) {
+        derivedStateOf {
+            getPermissionStatusText(multiplePermissionsState)
+        }
+    }
 
     if (multiplePermissionsState.shouldShowRationale) {
         RequiredRationalPermissionsDialog(
@@ -26,6 +29,11 @@ fun RequiredMultiplePermissionScreen(
         )
 
     } else if (!multiplePermissionsState.allPermissionsGranted)  {
+        RequiredLaunchPermissionsDialog(
+            permissions,
+            multiplePermissionsState,
+        )
+
         SideEffect {
             multiplePermissionsState.launchMultiplePermissionRequest()
         }
@@ -36,17 +44,6 @@ fun RequiredMultiplePermissionScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-        permissionStatusText = "\n"
-        for(permissionStatus in multiplePermissionsState.permissions) {
-            val statusText = if (permissionStatus.status.isGranted) {
-                "Granted\n"
-            } else {
-                "Denied\n"
-            }
-            permissionStatusText += "${permissionStatus.permission}: $statusText"
-        }
-
         Text("Required Permission status: $permissionStatusText")
     }
 }

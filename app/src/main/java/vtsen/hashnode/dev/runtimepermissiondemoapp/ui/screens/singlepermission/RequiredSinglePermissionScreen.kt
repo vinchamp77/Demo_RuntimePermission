@@ -42,7 +42,6 @@ fun RequiredSinglePermissionScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Text("Required Permission status: $permissionStatusText")
     }
 }
