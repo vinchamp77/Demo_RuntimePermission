@@ -17,12 +17,17 @@ fun RequiredLaunchPermissionsDialog (
 ) {
     val context = LocalContext.current
     var permissionLabels = ""
-    for(permission in permissions) {
+    permissions.forEachIndexed { index, permission ->
         val permissionLabel = stringResource(
             context.packageManager.getPermissionInfo(permission, 0).labelRes
         )
-        permissionLabels += "$permissionLabel \n"
+        permissionLabels += permissionLabel
+
+        if (index < permission.count() - 1) {
+            permissionLabels += "\n"
+        }
     }
+
     AlertDialog(
         onDismissRequest = { },
         title = { Text(text = "Permission Required!") },
